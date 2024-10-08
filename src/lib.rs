@@ -9,8 +9,8 @@ use widestring::{U16String,U32String,U16CString,U32CString};
 pub trait ToEncode {
     fn to_shiftjis(&self) -> CString;
     fn to_cstring(&self) -> CString;
-    fn to_u16string(&self) -> U16CString;
-    fn to_u32string(&self) -> U32CString;
+    fn to_u16cstring(&self) -> U16CString;
+    fn to_u32cstring(&self) -> U32CString;
 }
 impl ToEncode for &str {
     fn to_shiftjis(&self) -> CString {
@@ -21,10 +21,10 @@ impl ToEncode for &str {
     fn to_cstring(&self) -> CString {
         CString::new(*self).expect("Failed to convert &str to CString")
     }
-    fn to_u16string(&self) -> U16CString{
+    fn to_u16cstring(&self) -> U16CString{
         U16CString::from_str(*self).unwrap()
     }
-    fn to_u32string(&self) -> U32CString{
+    fn to_u32cstring(&self) -> U32CString{
         U32CString::from_str(*self).unwrap()
     }
 
@@ -39,10 +39,10 @@ impl ToEncode for String {
     fn to_cstring(&self) -> CString {
         CString::new(self.as_str()).expect("Failed to convert String to CString")
     }
-   fn to_u16string(&self) -> U16CString{
+   fn to_u16cstring(&self) -> U16CString{
         U16CString::from_str(&*self.clone()).unwrap()
     }
-    fn to_u32string(&self) -> U32CString{
+    fn to_u32cstring(&self) -> U32CString{
         U32CString::from_str(&*self.clone()).unwrap()
     }
 
@@ -59,12 +59,12 @@ impl ToEncode for *mut i8 {
     fn to_shiftjis(&self) -> CString {
         CString::new("").unwrap()
     }
-   fn to_u16string(&self) -> U16CString{
+   fn to_u16cstring(&self) -> U16CString{
         let c_str = unsafe{CStr::from_ptr(*self as *const i8)};
         let rs_str = c_str.to_str().unwrap();
         U16CString::from_str(rs_str).unwrap()
     }
-    fn to_u32string(&self) -> U32CString{
+    fn to_u32cstring(&self) -> U32CString{
         let c_str = unsafe{CStr::from_ptr(*self as *const i8)};
         let rs_str = c_str.to_str().unwrap();
         U32CString::from_str(rs_str).unwrap()
@@ -83,12 +83,12 @@ impl ToEncode for *const i8 {
     fn to_shiftjis(&self) -> CString {
         CString::new("").unwrap()
     }
- fn to_u16string(&self) -> U16CString{
+ fn to_u16cstring(&self) -> U16CString{
         let c_str = unsafe{CStr::from_ptr(*self)};
         let rs_str = c_str.to_str().unwrap();
         U16CString::from_str(rs_str).unwrap()
     }
-    fn to_u32string(&self) -> U32CString{
+    fn to_u32cstring(&self) -> U32CString{
          let c_str = unsafe{CStr::from_ptr(*self)};
         let rs_str = c_str.to_str().unwrap();
         U32CString::from_str(rs_str).unwrap()
@@ -130,8 +130,8 @@ mod tests {
             }
             fclose(fp);
         */
-        let title = "タイトル".to_u16string();
-        let content = "こんにちは世界".to_u16string();
+        let title = "タイトル".to_u16cstring();
+        let content = "こんにちは世界".to_u16cstring();
         MessageBoxW(null_mut(),title.as_ptr(),content.as_ptr(),0);      
       }
 
